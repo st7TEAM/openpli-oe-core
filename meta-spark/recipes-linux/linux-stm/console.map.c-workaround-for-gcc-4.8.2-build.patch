@@ -1,0 +1,29 @@
+From 9476b77322756da47dc307d31d99a59d0f2b414d Mon Sep 17 00:00:00 2001
+From: Markus Volk <f_l_k@gmx.net>
+Date: Sat, 3 May 2014 11:16:26 +0200
+Subject: [PATCH 2450/2450] console.map.c: workaround for gcc 4.8.2 build
+
+Signed-off-by: Markus Volk <f_l_k@gmx.net>
+---
+ drivers/char/consolemap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/consolemap.c b/drivers/char/consolemap.c
+index 45d3e80..323c964 100644
+--- a/drivers/char/consolemap.c
++++ b/drivers/char/consolemap.c
+@@ -649,9 +649,9 @@ int con_get_unimap(struct vc_data *vc, ushort ct, ushort __user *uct, struct uni
+ 			if ((p2 = *(p1++)))
+ 				for (k = 0; k < 64; k++) {
+ 					if (*p2 < MAX_GLYPH && ect++ < ct) {
+-						__put_user((u_short)((i<<11)+(j<<6)+k),
++						put_user((u_short)((i<<11)+(j<<6)+k),
+ 							   &list->unicode);
+-						__put_user((u_short) *p2, 
++						put_user((u_short) *p2, 
+ 							   &list->fontpos);
+ 						list++;
+ 					}
+-- 
+1.8.5.2
+

@@ -1,0 +1,25 @@
+--- a/libavcodec/dpxenc.c	2014-04-15 07:09:36.071822609 +0200
++++ b/libavcodec/dpxenc.c	2014-04-15 07:10:47.198474872 +0200
+@@ -129,7 +129,10 @@
+     buf[801] = 2; /* linear transfer */
+     buf[802] = 2; /* linear colorimetric */
+     buf[803] = s->bits_per_component;
+-    write16(buf + 804, s->bits_per_component == 10 ? 1 : 0); /* packing method */
++    if (s->bits_per_component == 10)
++        write16(buf + 804, 1); /* packing method */
++    else
++        write16(buf + 804, 0); /* packing method */
+ 
+     /* Image source information header */
+     write32(buf + 1628, avctx->sample_aspect_ratio.num);
+--- a/libavutil/bswap.h	2014-04-15 08:12:30.686280108 +0200
++++ b/libavutil/bswap.h	2014-04-15 08:12:41.667591662 +0200
+@@ -40,8 +40,6 @@
+ #   include "avr32/bswap.h"
+ #elif ARCH_BFIN
+ #   include "bfin/bswap.h"
+-#elif ARCH_SH4
+-#   include "sh4/bswap.h"
+ #elif ARCH_X86
+ #   include "x86/bswap.h"
+ #endif
